@@ -25,13 +25,16 @@ void setup() {
   }
 
   // Configuramos los pines del temporizador.
+  // - WAKE
   pinMode(TPL5010_WAKE, INPUT);       // Pin "WAKE" como entrada
+  // - DONE
   pinMode(TPL5010_DONE, OUTPUT);      // Pin "DONE" como salida
   digitalWrite(TPL5010_DONE, LOW);    // Ponemos pin "DONE" a cero
+  // - LED
   pinMode(LED_BUILTIN, OUTPUT);       // Pin "LED" como salida
 
   // Configuramos la interrupción de control del temporizador  
-  attachInterrupt(RFM95_DIO0, despertar, FALLING);
+  attachInterrupt(digitalPinToInterrupt(TPL5010_WAKE),despertar, RISING);
 
   // Enviamos señal DONE (Hecho) para evitar el reseteo.
   digitalWrite(TPL5010_DONE, HIGH);
@@ -58,7 +61,7 @@ void loop() {
     Serial2.println(LoRa.packetRssi());
 
     // Cambia el estado del LED (lo hace parpadear)
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    digitalWrite(D0, !digitalRead(D0));
   }
 
   // Incrementa el contador y muestra el paso actual
